@@ -12,4 +12,7 @@ object CoreColors {
 
     @Stable
     val Text02 = Color(0xFF3B4063)
+
+    @Stable
+    val Background = Color(0xFFECF3FE)
 }

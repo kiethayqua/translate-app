@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import vn.kietnguyendev.translateapp.presentation.screens.BookmarkScreen
 import vn.kietnguyendev.translateapp.presentation.screens.HomeScreen
 import vn.kietnguyendev.translateapp.presentation.screens.SettingScreen
+import vn.kietnguyendev.translateapp.presentation.screens.TranslateScreen
 
 @Composable
 fun App() {
@@ -24,6 +25,10 @@ fun App() {
         }
         composable(Destination.Setting.name) {
             SettingScreen(navController)
+        }
+        composable(Destination.Translate.name+"/{title}") {
+            val title = it.arguments?.getString("title") ?: ""
+            TranslateScreen(navController, title = title)
         }
     }
 }
