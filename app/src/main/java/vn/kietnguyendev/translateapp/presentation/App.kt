@@ -16,7 +16,6 @@ import vn.kietnguyendev.translateapp.presentation.translate.TranslateScreen
 import vn.kietnguyendev.translateapp.presentation.translate.TranslateViewModel
  import androidx.hilt.navigation.compose.hiltViewModel
 import vn.kietnguyendev.translateapp.presentation.camera.CameraScreen
-import java.net.URLDecoder
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
@@ -25,32 +24,31 @@ fun App() {
     
     NavHost(
         navController = navController,
-        startDestination = Destination.Home.name,
+        startDestination = Destination.HomeScreen.route,
     ) {
-        composable(Destination.Home.name) {
+        composable(Destination.HomeScreen.route) {
             HomeScreen(navController)
         }
-        composable(Destination.Bookmark.name) {
+        composable(Destination.BookmarkScreen.route) {
             BookmarkScreen(navController)
         }
-        composable(Destination.Setting.name) {
+        composable(Destination.SettingScreen.route) {
             SettingScreen(navController)
         }
-        composable(Destination.Translate.name+"?title={title}?initialText={initialText}") {
-            val title = it.arguments?.getString("title") ?: ""
-            val initialText = it.arguments?.getString("initialText") ?: ""
+        composable(Destination.TranslateScreen.route) { entry ->
+            val title = entry.arguments?.getString("title") ?: ""
+            val initialText = entry.arguments?.getString("initialText") ?: ""
             val viewModel: TranslateViewModel = hiltViewModel()
             val translateState by viewModel.state
             val onChangeText = remember { viewModel::onChangeText }
             LaunchedEffect(true) {
                 if (initialText.isNotEmpty()) {
-                    val decodeStr = URLDecoder.decode(initialText)
-                    viewModel.initWithText(decodeStr)
+                    viewModel.initWithText(initialText)
                 }
             }
             TranslateScreen(navController, title = title, state = translateState, onChangeText = onChangeText)
         }
-        composable(Destination.Camera.name) {
+        composable(Destination.CameraScreen.route) {
             CameraScreen(navController)
         }
     }

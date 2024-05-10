@@ -42,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -53,7 +54,7 @@ import vn.kietnguyendev.translateapp.R
 import vn.kietnguyendev.translateapp.analyzer.TextAnalyzer
 import vn.kietnguyendev.translateapp.presentation.CoreColors
 import vn.kietnguyendev.translateapp.presentation.Destination
-import java.net.URLEncoder
+import vn.kietnguyendev.translateapp.presentation.navigate
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -111,7 +112,7 @@ fun CameraScreen(
                     .height(65.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .background(CoreColors.Primary)
-                    .clickable { navController.navigate(Destination.Translate.name + "?title=Camera?initialText=${URLEncoder.encode(resultText.value)}") }, contentAlignment = Alignment.Center) {
+                    .clickable { navController.navigate(Destination.TranslateScreen.route, bundleOf("title" to "Camera", "initialText" to resultText.value)) }, contentAlignment = Alignment.Center) {
                     Text(text = "Translate", fontSize = 20.sp, fontWeight = FontWeight.Black, color = Color.White)
                 }
             }

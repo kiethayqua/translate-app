@@ -1,5 +1,6 @@
 package vn.kietnguyendev.translateapp.presentation.home
 
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,33 +22,35 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
-import androidx.navigation.NavOptionsBuilder
 import vn.kietnguyendev.translateapp.presentation.components.HeaderTitle
 import vn.kietnguyendev.translateapp.presentation.components.NavigationHeader
 import vn.kietnguyendev.translateapp.R
 import vn.kietnguyendev.translateapp.presentation.CoreColors
 import vn.kietnguyendev.translateapp.presentation.Destination
 import vn.kietnguyendev.translateapp.presentation.components.HeaderIcon
+import vn.kietnguyendev.translateapp.presentation.navigate
 
 val mainFeatures = listOf(
     MainFeature(
         id = 0,
         resId = R.drawable.ic_text,
         title = "Text",
-        route = Destination.Translate.name + "?title=Text"
+        route = Destination.TranslateScreen.route,
+        args = bundleOf("title" to "Text", "initialText" to "")
     ),
     MainFeature(
         id = 1,
         resId = R.drawable.ic_camera,
         title = "Camera",
-        route = Destination.Camera.name
+        route = Destination.CameraScreen.route
     ),
     MainFeature(
         id = 2,
         resId = R.drawable.ic_conversation,
         title = "Record",
-        route = Destination.Record.name
+        route = Destination.RecordScreen.route
     )
 )
 
@@ -62,7 +65,7 @@ fun HomeScreen(
             HeaderIcon(
                 painter = painterResource(id = R.drawable.ic_star),
                 modifier = Modifier.clickable {
-                    navController.navigate(Destination.Bookmark.name)
+                    navController.navigate(Destination.BookmarkScreen.route)
                 }
             )
         },
@@ -70,7 +73,7 @@ fun HomeScreen(
             HeaderIcon(
                 painter = painterResource(id = R.drawable.ic_setting),
                 modifier = Modifier.clickable {
-                    navController.navigate(Destination.Setting.name)
+                    navController.navigate(Destination.SettingScreen.route)
                 }
             )
         }
@@ -85,7 +88,7 @@ fun HomeScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { navController.navigate(it.route) }
+                        .clickable { navController.navigate(route = it.route, args = it.args ?: bundleOf()) }
                         .shadow(elevation = 2.dp, RoundedCornerShape(16.dp))
                         .background(Color.White)
                         .padding(vertical = 28.dp),
@@ -112,5 +115,6 @@ data class MainFeature(
     val id: Int,
     val resId: Int,
     val title: String,
-    val route: String
+    val route: String,
+    val args: Bundle? = null
 )
