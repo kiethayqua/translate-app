@@ -1,13 +1,15 @@
-package vn.kietnguyendev.translateapp.presentation.screens
+package vn.kietnguyendev.translateapp.presentation.translate
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.absoluteOffset
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -38,6 +40,7 @@ import vn.kietnguyendev.translateapp.presentation.components.HeaderTitle
 fun TranslateScreen(
     navController: NavController,
     title: String,
+    state: TranslateState
 ) {
     val density = LocalDensity.current
     val statusBarHeight = with(density) {
@@ -72,7 +75,8 @@ fun TranslateScreen(
                 }
                 Box(modifier = Modifier.offset(y = statusBarHeight + 16.dp + 24.dp + 36.dp)) {
                     Row(
-                        modifier = Modifier.padding(horizontal = 20.dp)
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp)
                             .fillMaxWidth()
                             .shadow(elevation = 2.dp, RoundedCornerShape(12.dp))
                             .background(Color.White)
@@ -88,7 +92,7 @@ fun TranslateScreen(
                                 .background(CoreColors.Primary),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(text = "English", fontWeight = FontWeight.SemiBold, fontSize = 16.sp, color = Color.White)
+                            Text(text = state.from, fontWeight = FontWeight.SemiBold, fontSize = 16.sp, color = Color.White)
                         }
                         Image(painter = painterResource(id = R.drawable.ic_arrow), contentDescription = null, modifier = Modifier.width(18.dp))
                         Box(
@@ -99,7 +103,7 @@ fun TranslateScreen(
                                 .background(CoreColors.Primary),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(text = "Vietnamese", fontWeight = FontWeight.SemiBold, fontSize = 16.sp, color = Color.White)
+                            Text(text = state.to, fontWeight = FontWeight.SemiBold, fontSize = 16.sp, color = Color.White)
                         }
                     }
                 }
@@ -107,5 +111,17 @@ fun TranslateScreen(
             }
         },
     ) { paddingValues ->
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .background(CoreColors.Background)
+            .padding(top = paddingValues.calculateTopPadding() + 72.dp, start = 16.dp, end = 16.dp)) {
+            TextInputBlock(leftTitle = "From", rightTitle = state.from, textContent = state.fromText, textColor = CoreColors.Text01) {
+
+            }
+            Spacer(modifier = Modifier.height(40.dp))
+            TextInputBlock(leftTitle = "To", rightTitle = state.to, textContent = state.toText, textColor = CoreColors.Primary) {
+
+            }
+        }
     }
 }

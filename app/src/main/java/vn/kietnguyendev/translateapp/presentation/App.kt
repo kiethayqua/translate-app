@@ -1,13 +1,17 @@
 package vn.kietnguyendev.translateapp.presentation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import vn.kietnguyendev.translateapp.presentation.screens.BookmarkScreen
-import vn.kietnguyendev.translateapp.presentation.screens.HomeScreen
-import vn.kietnguyendev.translateapp.presentation.screens.SettingScreen
-import vn.kietnguyendev.translateapp.presentation.screens.TranslateScreen
+import vn.kietnguyendev.translateapp.presentation.bookmark.BookmarkScreen
+import vn.kietnguyendev.translateapp.presentation.home.HomeScreen
+import vn.kietnguyendev.translateapp.presentation.setting.SettingScreen
+import vn.kietnguyendev.translateapp.presentation.translate.TranslateScreen
+import vn.kietnguyendev.translateapp.presentation.translate.TranslateViewModel
+ import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun App() {
@@ -28,7 +32,12 @@ fun App() {
         }
         composable(Destination.Translate.name+"/{title}") {
             val title = it.arguments?.getString("title") ?: ""
-            TranslateScreen(navController, title = title)
+            val viewModel: TranslateViewModel = hiltViewModel()
+            val translateState by viewModel.state
+            LaunchedEffect(true) {
+                viewModel.initWithText("Hi am Kiet")
+            }
+            TranslateScreen(navController, title = title, state = translateState)
         }
     }
 }

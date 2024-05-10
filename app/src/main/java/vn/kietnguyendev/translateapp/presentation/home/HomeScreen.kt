@@ -1,4 +1,4 @@
-package vn.kietnguyendev.translateapp.presentation.screens
+package vn.kietnguyendev.translateapp.presentation.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
