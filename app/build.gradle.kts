@@ -87,7 +87,7 @@ dependencies {
     // MLKit translate
     implementation("com.google.android.gms:play-services-mlkit-text-recognition:16.0.0")
     implementation("com.google.mlkit:language-id:16.0.0")
-    implementation("com.google.mlkit:translate:17.0.2")
+    implementation("com.google.mlkit:translate:16.0.0")
 
     // CameraX dependencies
     implementation("androidx.camera:camera-lifecycle:${camerax_version}")
