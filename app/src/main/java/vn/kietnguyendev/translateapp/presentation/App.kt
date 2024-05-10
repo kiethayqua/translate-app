@@ -13,6 +13,7 @@ import vn.kietnguyendev.translateapp.presentation.setting.SettingScreen
 import vn.kietnguyendev.translateapp.presentation.translate.TranslateScreen
 import vn.kietnguyendev.translateapp.presentation.translate.TranslateViewModel
  import androidx.hilt.navigation.compose.hiltViewModel
+import vn.kietnguyendev.translateapp.presentation.camera.CameraScreen
 
 @Composable
 fun App() {
@@ -31,7 +32,7 @@ fun App() {
         composable(Destination.Setting.name) {
             SettingScreen(navController)
         }
-        composable(Destination.Translate.name+"/{title}") {
+        composable(Destination.Translate.name+"?title={title}") {
             val title = it.arguments?.getString("title") ?: ""
             val viewModel: TranslateViewModel = hiltViewModel()
             val translateState by viewModel.state
@@ -40,6 +41,9 @@ fun App() {
                 viewModel.initWithText("Hi am Kiet")
             }
             TranslateScreen(navController, title = title, state = translateState, onChangeText = onChangeText)
+        }
+        composable(Destination.Camera.name) {
+            CameraScreen(navController)
         }
     }
 }

@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavOptionsBuilder
 import vn.kietnguyendev.translateapp.presentation.components.HeaderTitle
 import vn.kietnguyendev.translateapp.presentation.components.NavigationHeader
 import vn.kietnguyendev.translateapp.R
@@ -34,7 +35,7 @@ val mainFeatures = listOf(
         id = 0,
         resId = R.drawable.ic_text,
         title = "Text",
-        route = Destination.Translate.name
+        route = Destination.Translate.name + "?title=Text"
     ),
     MainFeature(
         id = 1,
@@ -84,7 +85,7 @@ fun HomeScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { navController.navigate(it.route + "/${it.title}") }
+                        .clickable { navController.navigate(it.route) }
                         .shadow(elevation = 2.dp, RoundedCornerShape(16.dp))
                         .background(Color.White)
                         .padding(vertical = 28.dp),

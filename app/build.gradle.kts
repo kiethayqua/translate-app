@@ -54,6 +54,7 @@ android {
 
 dependencies {
     val nav_version = "2.7.7"
+    val camerax_version = "1.2.0-beta01"
 
     implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
@@ -84,8 +85,15 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // MLKit translate
+    implementation("com.google.android.gms:play-services-mlkit-text-recognition:16.0.0")
+    implementation("com.google.mlkit:language-id:16.0.0")
     implementation("com.google.mlkit:translate:17.0.2")
-}
+
+    // CameraX dependencies
+    implementation("androidx.camera:camera-lifecycle:${camerax_version}")
+    implementation("androidx.camera:camera-view:${camerax_version}")
+    implementation("androidx.camera:camera-extensions:$camerax_version")
+    implementation("com.google.accompanist:accompanist-permissions:0.23.1")}
 
 // Allow references to generated code
 kapt {
