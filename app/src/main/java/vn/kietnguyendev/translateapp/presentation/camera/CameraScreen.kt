@@ -68,7 +68,7 @@ fun CameraScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     val permissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
     val cameraExecutor = remember { Executors.newSingleThreadExecutor() }
-    var resultText = remember { mutableStateOf("") }
+    val resultText = remember { mutableStateOf("") }
 
     DisposableEffect(Unit) {
         permissionState.launchPermissionRequest()

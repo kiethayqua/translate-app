@@ -38,6 +38,7 @@ fun App() {
         composable(Destination.TranslateScreen.route) { entry ->
             val title = entry.arguments?.getString("title") ?: ""
             val initialText = entry.arguments?.getString("initialText") ?: ""
+            val showRecord = entry.arguments?.getBoolean("showRecord") ?: false
             val viewModel: TranslateViewModel = hiltViewModel()
             val translateState by viewModel.state
             val onChangeText = remember { viewModel::onChangeText }
@@ -46,7 +47,7 @@ fun App() {
                     viewModel.initWithText(initialText)
                 }
             }
-            TranslateScreen(navController, title = title, state = translateState, onChangeText = onChangeText)
+            TranslateScreen(navController, title = title, state = translateState, showRecord = showRecord, onChangeText = onChangeText)
         }
         composable(Destination.CameraScreen.route) {
             CameraScreen(navController)

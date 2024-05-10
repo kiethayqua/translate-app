@@ -1,5 +1,11 @@
 package vn.kietnguyendev.translateapp.presentation.translate
 
+import android.Manifest
+import android.content.Intent
+import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,32 +26,91 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 import vn.kietnguyendev.translateapp.R
 import vn.kietnguyendev.translateapp.presentation.CoreColors
 import vn.kietnguyendev.translateapp.presentation.components.HeaderIcon
 import vn.kietnguyendev.translateapp.presentation.components.HeaderTitle
+import java.util.Locale
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun TranslateScreen(
     navController: NavController,
     title: String,
     state: TranslateState,
+    showRecord: Boolean = false,
     onChangeText: (String) -> Unit
 ) {
+    val context = LocalContext.current
     val density = LocalDensity.current
+    val isRecording = remember { mutableStateOf(false) }
+    val permissionState = rememberPermissionState(permission = Manifest.permission.RECORD_AUDIO)
+    val speechRecognizerIntent = remember { Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH) }
+    speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+    speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+
     val statusBarHeight = with(density) {
         WindowInsets.statusBars.getTop(this).toDp()
+    }
+    val speechRecognizer = remember {
+        SpeechRecognizer.createSpeechRecognizer(context)
+    }
+
+    DisposableEffect(Unit) {
+        if (showRecord) {
+            permissionState.launchPermissionRequest()
+        }
+
+        onDispose { speechRecognizer.destroy() }
+    }
+
+    LaunchedEffect(permissionState) {
+        if (showRecord && permissionState.hasPermission) {
+            val listener = object : RecognitionListener {
+                override fun onReadyForSpeech(params: Bundle?) {}
+
+                override fun onBeginningOfSpeech() {}
+
+                override fun onRmsChanged(rmsdB: Float) {}
+
+                override fun onBufferReceived(buffer: ByteArray?) {}
+
+                override fun onEndOfSpeech() {}
+
+                override fun onError(error: Int) {}
+
+                override fun onResults(results: Bundle?) {
+                    val data  = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                    onChangeText(data?.get(0) ?: "")
+                }
+
+                override fun onPartialResults(partialResults: Bundle?) {}
+
+                override fun onEvent(eventType: Int, params: Bundle?) {}
+
+            }
+            speechRecognizer.setRecognitionListener(listener)
+            isRecording.value = true
+            speechRecognizer.startListening(speechRecognizerIntent)
+        }
     }
 
     Scaffold(
@@ -125,8 +190,22 @@ fun TranslateScreen(
                 onPressBookmark = {}
             )
             Spacer(modifier = Modifier.height(40.dp))
-            TextInputBlock(leftTitle = "To", rightTitle = state.to, textContent = state.toText, textColor = CoreColors.Primary, disable = true) {
-
+            TextInputBlock(leftTitle = "To", rightTitle = state.to, textContent = state.toText, textColor = CoreColors.Primary, disable = true) {}
+            if (showRecord) {
+                Spacer(modifier = Modifier.height(40.dp))
+                Text(
+                    if (isRecording.value) "Listening..." else "Record",
+                    color = if (permissionState.hasPermission) Color.Red else Color.Blue,
+                    modifier = Modifier.clickable {
+                        if (isRecording.value) {
+                            speechRecognizer.stopListening()
+                            isRecording.value = false
+                        } else {
+                            speechRecognizer.startListening(speechRecognizerIntent)
+                            isRecording.value = true
+                        }
+                    }
+                )
             }
         }
     }

@@ -38,7 +38,7 @@ val mainFeatures = listOf(
         resId = R.drawable.ic_text,
         title = "Text",
         route = Destination.TranslateScreen.route,
-        args = bundleOf("title" to "Text", "initialText" to "")
+        args = bundleOf("title" to "Text")
     ),
     MainFeature(
         id = 1,
@@ -50,7 +50,8 @@ val mainFeatures = listOf(
         id = 2,
         resId = R.drawable.ic_conversation,
         title = "Record",
-        route = Destination.RecordScreen.route
+        route = Destination.TranslateScreen.route,
+        args = bundleOf("title" to "Record", "showRecord" to true)
     )
 )
 
