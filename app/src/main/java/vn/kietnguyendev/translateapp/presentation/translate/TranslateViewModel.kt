@@ -9,7 +9,9 @@ import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
@@ -17,18 +19,33 @@ import kotlinx.coroutines.launch
 class TranslateViewModel: ViewModel() {
     private val _state = mutableStateOf(TranslateState(from = "English", to = "Vietnamese"))
     val state: State<TranslateState> = _state
+    private var changeTextJob: Job? = null
 
     fun initWithText(initialText: String) {
         if (initialText.isNotEmpty()) {
             _state.value = _state.value.copy(fromText = initialText)
-            viewModelScope.launch(Dispatchers.IO) {
-                onTranslate(initialText).collect {
-                    _state.value = _state.value.copy(toText = it)
-                }
+            onTranslate(initialText)
+        }
+    }
+
+    fun onChangeText(text: String) {
+        _state.value = _state.value.copy(fromText = text)
+        changeTextJob?.cancel()
+        changeTextJob = viewModelScope.launch(Dispatchers.IO) {
+            delay(250)
+            onTranslate(text)
+        }
+    }
+
+    private fun onTranslate(text: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            translateFlow(text).collect {
+                _state.value = _state.value.copy(toText = it)
             }
         }
     }
-    private fun onTranslate(text: String): Flow<String> {
+
+    private fun translateFlow(text: String): Flow<String> {
         return callbackFlow {
             val options = TranslatorOptions.Builder()
                 .setSourceLanguage(TranslateLanguage.ENGLISH)

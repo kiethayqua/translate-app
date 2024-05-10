@@ -40,7 +40,8 @@ import vn.kietnguyendev.translateapp.presentation.components.HeaderTitle
 fun TranslateScreen(
     navController: NavController,
     title: String,
-    state: TranslateState
+    state: TranslateState,
+    onChangeText: (String) -> Unit
 ) {
     val density = LocalDensity.current
     val statusBarHeight = with(density) {
@@ -115,11 +116,16 @@ fun TranslateScreen(
             .fillMaxSize()
             .background(CoreColors.Background)
             .padding(top = paddingValues.calculateTopPadding() + 72.dp, start = 16.dp, end = 16.dp)) {
-            TextInputBlock(leftTitle = "From", rightTitle = state.from, textContent = state.fromText, textColor = CoreColors.Text01) {
-
-            }
+            TextInputBlock(
+                leftTitle = "From",
+                rightTitle = state.from,
+                textContent = state.fromText,
+                textColor = CoreColors.Text01,
+                onChangeText = onChangeText,
+                onPressBookmark = {}
+            )
             Spacer(modifier = Modifier.height(40.dp))
-            TextInputBlock(leftTitle = "To", rightTitle = state.to, textContent = state.toText, textColor = CoreColors.Primary) {
+            TextInputBlock(leftTitle = "To", rightTitle = state.to, textContent = state.toText, textColor = CoreColors.Primary, disable = true) {
 
             }
         }

@@ -35,6 +35,7 @@ fun TextInputBlock(
     rightTitle: String,
     textContent: String,
     textColor: Color,
+    disable: Boolean = false,
     onChangeText: (String) -> Unit = {},
     onPressBookmark: () -> Unit
 ) {
@@ -64,7 +65,8 @@ fun TextInputBlock(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 ),
-                textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Medium, color = textColor)
+                textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Medium, color = textColor),
+                enabled = !disable
             )
             Row(modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp, start = 16.dp, end = 16.dp), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
                 BottomIcon(painter = painterResource(id = R.drawable.ic_volumn))

@@ -3,6 +3,7 @@ package vn.kietnguyendev.translateapp.presentation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -34,10 +35,11 @@ fun App() {
             val title = it.arguments?.getString("title") ?: ""
             val viewModel: TranslateViewModel = hiltViewModel()
             val translateState by viewModel.state
+            val onChangeText = remember { viewModel::onChangeText }
             LaunchedEffect(true) {
                 viewModel.initWithText("Hi am Kiet")
             }
-            TranslateScreen(navController, title = title, state = translateState)
+            TranslateScreen(navController, title = title, state = translateState, onChangeText = onChangeText)
         }
     }
 }
