@@ -93,7 +93,11 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:${camerax_version}")
     implementation("androidx.camera:camera-view:${camerax_version}")
     implementation("androidx.camera:camera-extensions:$camerax_version")
-    implementation("com.google.accompanist:accompanist-permissions:0.23.1")}
+    implementation("com.google.accompanist:accompanist-permissions:0.23.1")
+
+    // Splash Screen
+    implementation("androidx.core:core-splashscreen:1.0.0-beta02")
+}
 
 // Allow references to generated code
 kapt {
