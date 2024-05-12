@@ -2,6 +2,7 @@ package vn.kietnguyendev.translateapp.presentation.camera
 
 import android.Manifest
 import android.content.Context
+import android.hardware.camera2.CameraManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.camera.core.CameraSelector
@@ -55,6 +56,7 @@ import vn.kietnguyendev.translateapp.analyzer.TextAnalyzer
 import vn.kietnguyendev.translateapp.presentation.CoreColors
 import vn.kietnguyendev.translateapp.presentation.Destination
 import vn.kietnguyendev.translateapp.presentation.navigate
+import java.lang.Exception
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -69,17 +71,24 @@ fun CameraScreen(
     val permissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
     val cameraExecutor = remember { Executors.newSingleThreadExecutor() }
     val resultText = remember { mutableStateOf("") }
+    val isFlashLightOn = remember { mutableStateOf(false) }
 
     DisposableEffect(Unit) {
         permissionState.launchPermissionRequest()
-
         onDispose { cameraExecutor.shutdown() }
     }
 
     val previewView: PreviewView = remember { PreviewView(context) }
 
-    LaunchedEffect(previewView) {
-        context.setUpCamera(resultText, cameraExecutor, lifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, previewView)
+    LaunchedEffect(previewView, isFlashLightOn.value) {
+        context.setUpCamera(
+            resultText,
+            cameraExecutor,
+            lifecycleOwner,
+            CameraSelector.DEFAULT_BACK_CAMERA,
+            previewView,
+            isFlashLightOn.value
+        )
     }
 
     PermissionRequired(
@@ -101,7 +110,12 @@ fun CameraScreen(
                 Image(
                     painter = painterResource(id = R.drawable.ic_flash),
                     contentDescription = null,
-                    modifier = Modifier.size(52.dp)
+                    modifier = Modifier
+                        .size(52.dp)
+                        .alpha(if (isFlashLightOn.value) 1f else 0.5f)
+                        .clickable {
+                            isFlashLightOn.value = isFlashLightOn.value.not()
+                        }
                 )
             }
             Box(modifier = Modifier
@@ -138,7 +152,8 @@ suspend fun Context.setUpCamera(
     cameraExecutor: Executor,
     lifecycleOwner: LifecycleOwner,
     cameraSelector: CameraSelector,
-    previewView: PreviewView
+    previewView: PreviewView,
+    isFlashLightOn: Boolean
 ) {
     val preview = Preview.Builder()
         .build()
@@ -163,5 +178,5 @@ suspend fun Context.setUpCamera(
         cameraSelector,
         preview,
         imageAnalyzer
-    )
+    ).cameraControl.enableTorch(isFlashLightOn)
 }
