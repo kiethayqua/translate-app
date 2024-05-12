@@ -2,6 +2,7 @@ package vn.kietnguyendev.translateapp.presentation.translate
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,8 +30,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -53,6 +56,7 @@ fun TextInputBlock(
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+    val clipboardManager = LocalClipboardManager.current
     val keyboardActions = remember(textContent) {
         KeyboardActions(onDone = {
             focusManager.clearFocus()
@@ -120,7 +124,7 @@ fun TextInputBlock(
                 Spacer(modifier = Modifier.width(12.dp))
                 BottomIcon(painter = painterResource(id = R.drawable.ic_star_gray))
                 Spacer(modifier = Modifier.width(12.dp))
-                BottomIcon(painter = painterResource(id = R.drawable.ic_copy))
+                BottomIcon(painter = painterResource(id = R.drawable.ic_copy), modifier = Modifier.clickable { clipboardManager.setText(AnnotatedString(textContent)) })
             }
         }
     }

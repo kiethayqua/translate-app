@@ -2,7 +2,6 @@ package vn.kietnguyendev.translateapp.presentation.camera
 
 import android.Manifest
 import android.content.Context
-import android.hardware.camera2.CameraManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.camera.core.CameraSelector
@@ -56,7 +55,6 @@ import vn.kietnguyendev.translateapp.analyzer.TextAnalyzer
 import vn.kietnguyendev.translateapp.presentation.CoreColors
 import vn.kietnguyendev.translateapp.presentation.Destination
 import vn.kietnguyendev.translateapp.presentation.navigate
-import java.lang.Exception
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -99,14 +97,18 @@ fun CameraScreen(
             factory = { previewView },
             modifier = Modifier.fillMaxSize()
         )
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .alpha(0.5f)
-            .background(Color.Black))
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(0.5f)
+                .background(Color.Black)
+        )
         Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
-            Row(horizontalArrangement = Arrangement.End, modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 50.dp, end = 20.dp)) {
+            Row(
+                horizontalArrangement = Arrangement.End, modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 50.dp, end = 20.dp)
+            ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_flash),
                     contentDescription = null,
@@ -118,16 +120,29 @@ fun CameraScreen(
                         }
                 )
             }
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 50.dp), contentAlignment = Alignment.Center){
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 50.dp), contentAlignment = Alignment.Center
+            ) {
                 Box(modifier = Modifier
                     .width(260.dp)
                     .height(65.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .background(CoreColors.Primary)
-                    .clickable { navController.navigate(Destination.TranslateScreen.route, bundleOf("title" to "Camera", "initialText" to resultText.value)) }, contentAlignment = Alignment.Center) {
-                    Text(text = "Translate", fontSize = 20.sp, fontWeight = FontWeight.Black, color = Color.White)
+                    .clickable {
+                        navController.navigate(
+                            Destination.TranslateScreen.route,
+                            bundleOf("title" to "Camera", "initialText" to resultText.value)
+                        )
+                    }, contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Translate",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Black,
+                        color = Color.White
+                    )
                 }
             }
         }
@@ -178,5 +193,7 @@ suspend fun Context.setUpCamera(
         cameraSelector,
         preview,
         imageAnalyzer
-    ).cameraControl.enableTorch(isFlashLightOn)
+    )
+        .cameraControl
+        .enableTorch(isFlashLightOn)
 }
