@@ -34,6 +34,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -57,7 +59,9 @@ fun TranslateScreen(
     title: String,
     state: TranslateState,
     showRecord: Boolean = false,
-    onChangeText: (String) -> Unit
+    needFocus: Boolean = false,
+    onChangeText: (String) -> Unit,
+    onTranslate: (String) -> Unit
 ) {
     val context = LocalContext.current
     val density = LocalDensity.current
@@ -186,11 +190,13 @@ fun TranslateScreen(
                 rightTitle = state.from,
                 textContent = state.fromText,
                 textColor = CoreColors.Text01,
+                needFocus = needFocus,
                 onChangeText = onChangeText,
+                onTranslate = onTranslate,
                 onPressBookmark = {}
             )
             Spacer(modifier = Modifier.height(40.dp))
-            TextInputBlock(leftTitle = "To", rightTitle = state.to, textContent = state.toText, textColor = CoreColors.Primary, disable = true) {}
+            TextInputBlock(leftTitle = "To", rightTitle = state.to, textContent = state.toText, textColor = CoreColors.Primary, disable = true)
             if (showRecord) {
                 Spacer(modifier = Modifier.height(40.dp))
                 Text(

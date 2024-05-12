@@ -39,15 +39,24 @@ fun App() {
             val title = entry.arguments?.getString("title") ?: ""
             val initialText = entry.arguments?.getString("initialText") ?: ""
             val showRecord = entry.arguments?.getBoolean("showRecord") ?: false
+            val needFocus = entry.arguments?.getBoolean("needFocus") ?: false
             val viewModel: TranslateViewModel = hiltViewModel()
             val translateState by viewModel.state
             val onChangeText = remember { viewModel::onChangeText }
+            val onTranslate = remember { viewModel::onTranslate }
             LaunchedEffect(true) {
                 if (initialText.isNotEmpty()) {
                     viewModel.initWithText(initialText)
                 }
             }
-            TranslateScreen(navController, title = title, state = translateState, showRecord = showRecord, onChangeText = onChangeText)
+            TranslateScreen(
+                navController,
+                title = title,
+                state = translateState,
+                showRecord = showRecord,
+                needFocus = needFocus,
+                onChangeText = onChangeText,
+                onTranslate = onTranslate)
         }
         composable(Destination.CameraScreen.route) {
             CameraScreen(navController)

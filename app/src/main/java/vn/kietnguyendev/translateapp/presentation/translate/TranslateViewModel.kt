@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 class TranslateViewModel: ViewModel() {
     private val _state = mutableStateOf(TranslateState(from = "English", to = "Vietnamese"))
     val state: State<TranslateState> = _state
-    private var changeTextJob: Job? = null
 
     fun initWithText(initialText: String) {
         if (initialText.isNotEmpty()) {
@@ -30,14 +29,9 @@ class TranslateViewModel: ViewModel() {
 
     fun onChangeText(text: String) {
         _state.value = _state.value.copy(fromText = text)
-        changeTextJob?.cancel()
-        changeTextJob = viewModelScope.launch(Dispatchers.IO) {
-            delay(250)
-            onTranslate(text)
-        }
     }
 
-    private fun onTranslate(text: String) {
+    fun onTranslate(text: String) {
         viewModelScope.launch(Dispatchers.IO) {
             translateFlow(text).collect {
                 _state.value = _state.value.copy(toText = it)

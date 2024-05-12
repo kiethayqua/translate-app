@@ -38,7 +38,7 @@ val mainFeatures = listOf(
         resId = R.drawable.ic_text,
         title = "Text",
         route = Destination.TranslateScreen.route,
-        args = bundleOf("title" to "Text")
+        args = bundleOf("title" to "Text", "needFocus" to true)
     ),
     MainFeature(
         id = 1,
