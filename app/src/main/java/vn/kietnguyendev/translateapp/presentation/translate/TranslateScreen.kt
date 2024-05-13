@@ -49,6 +49,7 @@ import vn.kietnguyendev.translateapp.R
 import vn.kietnguyendev.translateapp.presentation.CoreColors
 import vn.kietnguyendev.translateapp.presentation.components.HeaderIcon
 import vn.kietnguyendev.translateapp.presentation.components.HeaderTitle
+import vn.kietnguyendev.translateapp.util.LanguageUtil
 import java.util.Locale
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -62,6 +63,7 @@ fun TranslateScreen(
     onChangeText: (String) -> Unit,
     onTranslate: (String) -> Unit,
     onBookmark: (String, String) -> Unit,
+    onSwapLang: () -> Unit
 ) {
     val context = LocalContext.current
     val density = LocalDensity.current
@@ -173,7 +175,7 @@ fun TranslateScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = state.from,
+                                text = LanguageUtil.getLanguageFromCode(state.from),
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 16.sp,
                                 color = Color.White
@@ -182,7 +184,7 @@ fun TranslateScreen(
                         Image(
                             painter = painterResource(id = R.drawable.ic_arrow),
                             contentDescription = null,
-                            modifier = Modifier.width(18.dp)
+                            modifier = Modifier.width(18.dp).clickable { onSwapLang() }
                         )
                         Box(
                             modifier = Modifier
@@ -193,7 +195,7 @@ fun TranslateScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = state.to,
+                                text = LanguageUtil.getLanguageFromCode(state.to),
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 16.sp,
                                 color = Color.White
@@ -217,7 +219,7 @@ fun TranslateScreen(
         ) {
             TextInputBlock(
                 leftTitle = "From",
-                rightTitle = state.from,
+                rightTitle = LanguageUtil.getLanguageFromCode(state.from),
                 textContent = state.fromText,
                 textColor = CoreColors.Text01,
                 needFocus = needFocus,
@@ -228,7 +230,7 @@ fun TranslateScreen(
             Spacer(modifier = Modifier.height(40.dp))
             TextInputBlock(
                 leftTitle = "To",
-                rightTitle = state.to,
+                rightTitle = LanguageUtil.getLanguageFromCode(state.to),
                 textContent = state.toText,
                 textColor = CoreColors.Primary,
                 disable = true,
