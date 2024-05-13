@@ -102,7 +102,9 @@ fun TranslateScreen(
 
                 override fun onResults(results: Bundle?) {
                     val data  = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                    onChangeText(data?.get(0) ?: "")
+                    val text = data?.get(0) ?: ""
+                    onChangeText(text)
+                    onTranslate(text)
                 }
 
                 override fun onPartialResults(partialResults: Bundle?) {}
