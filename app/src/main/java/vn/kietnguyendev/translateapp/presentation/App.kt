@@ -15,6 +15,7 @@ import vn.kietnguyendev.translateapp.presentation.setting.SettingScreen
 import vn.kietnguyendev.translateapp.presentation.translate.TranslateScreen
 import vn.kietnguyendev.translateapp.presentation.translate.TranslateViewModel
  import androidx.hilt.navigation.compose.hiltViewModel
+import vn.kietnguyendev.translateapp.presentation.bookmark.BookmarkViewModel
 import vn.kietnguyendev.translateapp.presentation.camera.CameraScreen
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -30,7 +31,14 @@ fun App() {
             HomeScreen(navController)
         }
         composable(Destination.BookmarkScreen.route) {
-            BookmarkScreen(navController)
+            val viewModel: BookmarkViewModel = hiltViewModel()
+            val bookmarkState by viewModel.state
+            val onRemoveBookmark = remember { viewModel::onRemoveBookmark }
+            BookmarkScreen(
+                navController,
+                bookmarkState,
+                onRemoveBookmark
+            )
         }
         composable(Destination.SettingScreen.route) {
             SettingScreen(navController)
@@ -44,6 +52,7 @@ fun App() {
             val translateState by viewModel.state
             val onChangeText = remember { viewModel::onChangeText }
             val onTranslate = remember { viewModel::onTranslate }
+            val onBookmark = remember { viewModel::onBookmark }
             LaunchedEffect(true) {
                 if (initialText.isNotEmpty()) {
                     viewModel.initWithText(initialText)
@@ -56,7 +65,9 @@ fun App() {
                 showRecord = showRecord,
                 needFocus = needFocus,
                 onChangeText = onChangeText,
-                onTranslate = onTranslate)
+                onTranslate = onTranslate,
+                onBookmark = onBookmark
+            )
         }
         composable(Destination.CameraScreen.route) {
             CameraScreen(navController)

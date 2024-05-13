@@ -52,7 +52,7 @@ fun TextInputBlock(
     needFocus: Boolean = false,
     onChangeText: (String) -> Unit = {},
     onTranslate: (String) -> Unit = {},
-    onPressBookmark: () -> Unit = {},
+    onPressBookmark: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -122,7 +122,7 @@ fun TextInputBlock(
                 .padding(bottom = 8.dp, start = 16.dp, end = 16.dp), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
                 BottomIcon(painter = painterResource(id = R.drawable.ic_volumn))
                 Spacer(modifier = Modifier.width(12.dp))
-                BottomIcon(painter = painterResource(id = R.drawable.ic_star_gray))
+                BottomIcon(painter = painterResource(id = R.drawable.ic_star_gray), modifier = Modifier.clickable { onPressBookmark() })
                 Spacer(modifier = Modifier.width(12.dp))
                 BottomIcon(painter = painterResource(id = R.drawable.ic_copy), modifier = Modifier.clickable { clipboardManager.setText(AnnotatedString(textContent)) })
             }

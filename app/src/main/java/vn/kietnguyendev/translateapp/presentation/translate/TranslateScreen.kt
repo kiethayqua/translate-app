@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -35,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -60,14 +60,18 @@ fun TranslateScreen(
     showRecord: Boolean = false,
     needFocus: Boolean = false,
     onChangeText: (String) -> Unit,
-    onTranslate: (String) -> Unit
+    onTranslate: (String) -> Unit,
+    onBookmark: (String, String) -> Unit,
 ) {
     val context = LocalContext.current
     val density = LocalDensity.current
     val isRecording = remember { mutableStateOf(false) }
     val permissionState = rememberPermissionState(permission = Manifest.permission.RECORD_AUDIO)
     val speechRecognizerIntent = remember { Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH) }
-    speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+    speechRecognizerIntent.putExtra(
+        RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+    )
     speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
 
     val statusBarHeight = with(density) {
@@ -101,7 +105,7 @@ fun TranslateScreen(
                 override fun onError(error: Int) {}
 
                 override fun onResults(results: Bundle?) {
-                    val data  = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                    val data = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                     val text = data?.get(0) ?: ""
                     onChangeText(text)
                     onTranslate(text)
@@ -116,6 +120,11 @@ fun TranslateScreen(
             isRecording.value = true
             speechRecognizer.startListening(speechRecognizerIntent)
         }
+    }
+
+    val onPressBookmark = {
+        onBookmark(state.fromText, state.toText)
+        Toast.makeText(context, "Saved to bookmark", Toast.LENGTH_SHORT).show()
     }
 
     Scaffold(
@@ -163,9 +172,18 @@ fun TranslateScreen(
                                 .background(CoreColors.Primary),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(text = state.from, fontWeight = FontWeight.SemiBold, fontSize = 16.sp, color = Color.White)
+                            Text(
+                                text = state.from,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp,
+                                color = Color.White
+                            )
                         }
-                        Image(painter = painterResource(id = R.drawable.ic_arrow), contentDescription = null, modifier = Modifier.width(18.dp))
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_arrow),
+                            contentDescription = null,
+                            modifier = Modifier.width(18.dp)
+                        )
                         Box(
                             modifier = Modifier
                                 .width(123.dp)
@@ -174,7 +192,12 @@ fun TranslateScreen(
                                 .background(CoreColors.Primary),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(text = state.to, fontWeight = FontWeight.SemiBold, fontSize = 16.sp, color = Color.White)
+                            Text(
+                                text = state.to,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp,
+                                color = Color.White
+                            )
                         }
                     }
                 }
@@ -182,10 +205,16 @@ fun TranslateScreen(
             }
         },
     ) { paddingValues ->
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .background(CoreColors.Background)
-            .padding(top = paddingValues.calculateTopPadding() + 72.dp, start = 16.dp, end = 16.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(CoreColors.Background)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + 72.dp,
+                    start = 16.dp,
+                    end = 16.dp
+                )
+        ) {
             TextInputBlock(
                 leftTitle = "From",
                 rightTitle = state.from,
@@ -194,10 +223,16 @@ fun TranslateScreen(
                 needFocus = needFocus,
                 onChangeText = onChangeText,
                 onTranslate = onTranslate,
-                onPressBookmark = {}
+                onPressBookmark = onPressBookmark
             )
             Spacer(modifier = Modifier.height(40.dp))
-            TextInputBlock(leftTitle = "To", rightTitle = state.to, textContent = state.toText, textColor = CoreColors.Primary, disable = true)
+            TextInputBlock(
+                leftTitle = "To",
+                rightTitle = state.to,
+                textContent = state.toText,
+                textColor = CoreColors.Primary,
+                disable = true,
+                onPressBookmark = onPressBookmark)
             if (showRecord) {
                 Spacer(modifier = Modifier.height(40.dp))
                 Text(

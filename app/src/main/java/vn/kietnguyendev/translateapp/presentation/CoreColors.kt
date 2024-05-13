@@ -15,4 +15,7 @@ object CoreColors {
 
     @Stable
     val Background = Color(0xFFECF3FE)
+
+    @Stable
+    val Line = Color(0xFFCFE0FF)
 }
