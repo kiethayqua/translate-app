@@ -53,6 +53,7 @@ fun TextInputBlock(
     onChangeText: (String) -> Unit = {},
     onTranslate: (String) -> Unit = {},
     onPressBookmark: () -> Unit,
+    onTTS: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -120,7 +121,7 @@ fun TextInputBlock(
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp, start = 16.dp, end = 16.dp), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
-                BottomIcon(painter = painterResource(id = R.drawable.ic_volumn))
+                BottomIcon(painter = painterResource(id = R.drawable.ic_volumn), modifier = Modifier.clickable { onTTS() })
                 Spacer(modifier = Modifier.width(12.dp))
                 BottomIcon(painter = painterResource(id = R.drawable.ic_star_gray), modifier = Modifier.clickable { onPressBookmark() })
                 Spacer(modifier = Modifier.width(12.dp))

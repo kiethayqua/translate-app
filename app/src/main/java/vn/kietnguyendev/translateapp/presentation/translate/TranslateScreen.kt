@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.speech.tts.TextToSpeech
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -75,6 +76,24 @@ fun TranslateScreen(
         RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
     )
     speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+    val textToSpeechFrom = remember(state.from) {
+        var tts: TextToSpeech? = null
+        tts = TextToSpeech(context) { status ->
+            if (status != TextToSpeech.ERROR) {
+                tts?.setLanguage(LanguageUtil.getLocale(state.from));
+            }
+        }
+        tts
+    }
+    val textToSpeechTo = remember(state.to) {
+        var tts: TextToSpeech? = null
+        tts = TextToSpeech(context) { status ->
+            if (status != TextToSpeech.ERROR) {
+                tts?.setLanguage(LanguageUtil.getLocale(state.to));
+            }
+        }
+        tts
+    }
 
     val statusBarHeight = with(density) {
         WindowInsets.statusBars.getTop(this).toDp()
@@ -184,7 +203,9 @@ fun TranslateScreen(
                         Image(
                             painter = painterResource(id = R.drawable.ic_arrow),
                             contentDescription = null,
-                            modifier = Modifier.width(18.dp).clickable { onSwapLang() }
+                            modifier = Modifier
+                                .width(18.dp)
+                                .clickable { onSwapLang() }
                         )
                         Box(
                             modifier = Modifier
@@ -225,7 +246,8 @@ fun TranslateScreen(
                 needFocus = needFocus,
                 onChangeText = onChangeText,
                 onTranslate = onTranslate,
-                onPressBookmark = onPressBookmark
+                onPressBookmark = onPressBookmark,
+                onTTS = { textToSpeechFrom?.speak(state.fromText, TextToSpeech.QUEUE_FLUSH,null) }
             )
             Spacer(modifier = Modifier.height(40.dp))
             TextInputBlock(
@@ -234,7 +256,9 @@ fun TranslateScreen(
                 textContent = state.toText,
                 textColor = CoreColors.Primary,
                 disable = true,
-                onPressBookmark = onPressBookmark)
+                onPressBookmark = onPressBookmark,
+                onTTS = { textToSpeechTo?.speak(state.toText, TextToSpeech.QUEUE_FLUSH,null) }
+            )
             if (showRecord) {
                 Spacer(modifier = Modifier.height(40.dp))
                 Text(

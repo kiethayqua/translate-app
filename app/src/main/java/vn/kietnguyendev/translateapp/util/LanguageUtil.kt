@@ -2,6 +2,7 @@ package vn.kietnguyendev.translateapp.util
 
 import android.content.Context
 import com.google.mlkit.nl.translate.TranslateLanguage
+import java.util.Locale
 
 object LanguageUtil {
     fun getLanguageFromCode(code: String): String {
@@ -26,5 +27,16 @@ object LanguageUtil {
             key,
             Context.MODE_PRIVATE
         ).getString(key, null)
+    }
+
+    fun getLocale(lang: String): Locale {
+        return when (lang) {
+            TranslateLanguage.ENGLISH -> Locale.UK
+            TranslateLanguage.VIETNAMESE -> Locale.UK
+            TranslateLanguage.CHINESE -> Locale.CHINESE
+            TranslateLanguage.JAPANESE -> Locale.JAPANESE
+            TranslateLanguage.FRENCH -> Locale.FRENCH
+            else -> Locale.getDefault()
+        }
     }
 }
