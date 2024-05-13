@@ -18,6 +18,8 @@ import vn.kietnguyendev.translateapp.presentation.translate.TranslateViewModel
  import androidx.hilt.navigation.compose.hiltViewModel
 import vn.kietnguyendev.translateapp.presentation.bookmark.BookmarkViewModel
 import vn.kietnguyendev.translateapp.presentation.camera.CameraScreen
+import vn.kietnguyendev.translateapp.presentation.introduce.IntroduceScreen
+import vn.kietnguyendev.translateapp.presentation.policy.PolicyScreen
 import vn.kietnguyendev.translateapp.presentation.setting.SettingViewModel
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -82,6 +84,12 @@ fun App() {
         }
         composable(Destination.CameraScreen.route) {
             CameraScreen(navController)
+        }
+        composable(Destination.IntroduceScreen.route) {
+            IntroduceScreen(navController)
+        }
+        composable(Destination.PolicyScreen.route) {
+            PolicyScreen(navController)
         }
     }
 }

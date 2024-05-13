@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import com.google.mlkit.nl.translate.TranslateLanguage
 import vn.kietnguyendev.translateapp.R
 import vn.kietnguyendev.translateapp.presentation.CoreColors
+import vn.kietnguyendev.translateapp.presentation.Destination
 import vn.kietnguyendev.translateapp.presentation.components.HeaderTitle
 import vn.kietnguyendev.translateapp.presentation.components.NavigationHeader
 import vn.kietnguyendev.translateapp.util.LanguageUtil
@@ -78,11 +79,11 @@ fun SettingScreen(
             }
             Spacer(modifier = Modifier.height(8.dp))
             SettingItem(title = "Introduce") {
-
+                navController.navigate(Destination.IntroduceScreen.route)
             }
             Spacer(modifier = Modifier.height(8.dp))
             SettingItem(title = "Policy") {
-
+                navController.navigate(Destination.PolicyScreen.route)
             }
         }
 
