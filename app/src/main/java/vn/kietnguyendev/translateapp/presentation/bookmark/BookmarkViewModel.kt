@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
-import vn.kietnguyendev.translateapp.data.local.bookmark.Bookmark
+import vn.kietnguyendev.translateapp.core.database.model.Bookmark
 import vn.kietnguyendev.translateapp.data.local.bookmark.BookmarkRepository
 import javax.inject.Inject
 

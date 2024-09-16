@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
-import vn.kietnguyendev.translateapp.data.local.bookmark.Bookmark
+import vn.kietnguyendev.translateapp.core.database.model.Bookmark
 import vn.kietnguyendev.translateapp.data.local.bookmark.BookmarkRepository
 import vn.kietnguyendev.translateapp.presentation.setting.DEFAULT_LANG_KEY
 import vn.kietnguyendev.translateapp.presentation.setting.SECOND_LANG_KEY
