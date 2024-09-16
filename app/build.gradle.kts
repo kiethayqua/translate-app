@@ -1,8 +1,8 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -52,9 +52,17 @@ android {
     }
 }
 
+configurations.implementation {
+    exclude(group = "com.intellij", module = "annotations")
+}
+
 dependencies {
+    implementation(project(":core:database"))
     val nav_version = "2.7.7"
     val camerax_version = "1.2.0-beta01"
+
+    // NOTE: https://stackoverflow.com/questions/74216853/cannot-access-class-com-google-common-util-concurrent-listenablefuture-in-flut
+    implementation(libs.guava)
 
     implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
@@ -97,11 +105,6 @@ dependencies {
 
     // Splash Screen
     implementation("androidx.core:core-splashscreen:1.0.0-beta02")
-
-    // Room DB
-    implementation("androidx.room:room-runtime:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
 }
 
 // Allow references to generated code

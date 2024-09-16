@@ -1,4 +1,4 @@
-package vn.kietnguyendev.translateapp.data.local.bookmark
+package vn.kietnguyendev.translateapp.core.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
